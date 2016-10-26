@@ -17,12 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index');
-//Route::get('/category', 'CategoriaController@getAll');
-
 Route::group(['middleware' => 'web'], function () {
-  //  Route::auth();
-
+    //Route::auth();
     Route::get('/home',[
         'uses' => 'HomeController@index',
         'as'   => 'homeIndex'
@@ -32,25 +28,27 @@ Route::group(['middleware' => 'web'], function () {
 Route::group(['prefix' => 'admin'], function () {
     Route::auth();
 
+    //Admin
     Route::get('/',[
         'uses' => 'AdminController@index',
         'as'   => 'AdminIndex'
     ]);
 
+    //Categorias
     Route::get('/category/{page?}',[
-        'uses' => 'CategoriaController@index',
+        'uses' => 'CategoriaController@getAll',
         'as'   => 'CategoriaIndex'
     ]);
-    Route::get('user/{id}/destroy',[
-        'uses' => 'UsersController@destroy',
-        'as'   => 'userDestroy'
+    Route::get('category/{id}/destroy',[
+        'uses' => 'CategoriaController@delete',
+        'as'   => 'CategoriaDestroy'
     ]);
-    Route::get('/user',[
-        'uses' => 'UsersController@index',
-        'as'   => 'userList'
+    Route::get('category/{id}/edit',[
+        'uses' => 'CategoriaController@get',
+        'as'   => 'CategoriaEdit'
     ]);
-    Route::get('user/{id}/edit',[
-        'uses' => 'UsersController@edit',
-        'as'   => 'userEdit'
+    Route::post('category/addOrUpdate',[
+        'uses' => 'CategoriaController@addOrUpdate',
+        'as'   => 'CategoriaAddOrUpdate'
     ]);
 });

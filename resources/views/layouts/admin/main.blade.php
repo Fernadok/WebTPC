@@ -15,6 +15,7 @@
     <link href="{{ asset('css/plugins/font-awesome.min.css') }}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{{ asset('css/plugins/nprogress.css"') }} rel="stylesheet">
+    <link href="{{ asset('css/plugins/datatabla.css"') }} rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="{{ asset('css/plugins/custom.min.css') }}" rel="stylesheet">
@@ -68,12 +69,13 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
-            <div id="contenedorAdmin" class="panel-body">
-                @yield('content')
+        <div class="panel panel-default">
+            <div class="right_col" role="main">
+                <div id="contenedorAdmin" class="panel-body">
+                    <div class="loading"></div>
+                    <div id="content"></div>
+                </div>
             </div>
-            <div id="content">click any menu above to change content here</div>
-            <div class="loading"></div>
         </div>
         <!-- /page content -->
 
@@ -96,6 +98,8 @@
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('js/plugins/custom.min.js') }}"></script>
     <script src="{{ asset('js/common/helpers.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatable.js') }}"></script>
+
     <script type="text/javascript">
         function ajaxLoad(filename, content) {
             content = typeof content !== 'undefined' ? content : 'content';

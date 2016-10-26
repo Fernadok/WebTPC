@@ -13,20 +13,16 @@ class CategoriaController extends Controller
     /**
      * @var IBaseRepository
      */
-    private $repo;
+    private $repoitory;
 
     public function  __construct(CategoryRepository $repo)
     {
-        $this->repo = $repo;
+        $this->middleware('auth');
+        $this->repoitory = $repo;
     }
 
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
-      //  $categorias = $this->repo->all();
-
-      //  return $categorias;
-
-       // $user = User::orderBy('id','ASC')->paginate(3);
         $categorias = Categoria::orderBy('id','ASC')->paginate(5);
         if ($request->ajax() ) {
             $returnHTML = view('layouts.admin.categoria.index')
@@ -34,7 +30,36 @@ class CategoriaController extends Controller
                             ->render();
             return response()->json(array('success' => true, 'html'=>$returnHTML));
         }
-        return view('layouts.admin.categoria.index')->with('categoryModel',$categorias);
+        //return view('layouts.admin.categoria.index')->with('categoryModel',$categorias);
+    }
 
+    public function get($id)
+    {
+        $categorias = $this->repoitory->find($id);
+        return response()->json(array('success' => true, 'data'=>$categorias));
+    }
+
+    public  function addOrUpdate(Request $request)
+    {
+        if($request->ajax()){
+            $id = $request->data['id'];
+            $isNew = $this->repoitory->find($id);
+            if($isNew == null){
+                $cat = new Categoria();
+                $cat->descripcion = $request->data['descripcion'];
+                $cat->save();
+                return response()->json(["mensaje" => "Creado"]);
+            }
+            $this->repoitory->update($request->data,$id);
+            return response()->json(["mensaje" => "Actualizado"]);
+        }
+    }
+
+    public  function delete($id)
+    {
+        $this->repoitory->delete($id);
+        return response()->json(["mensaje"=>"Borrado"]);
     }
 }
+
+
