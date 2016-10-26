@@ -30,7 +30,7 @@
         <script src="{{ asset('js/angular/angular-resource.min.js') }}"></script>
         <script src="{{ asset('js/angular/angular-sanitize.min.js') }}"></script>
         <script src="{{ asset('js/angular/angular-ui/angular-route.min.js') }}"></script>
-        <script src="{{ asset('js/angular/angular-ui/ui-bootstrap.min.js') }}"></script>
+        <script src="{{ asset('plugins') }}"></script>
         <script src="{{ asset('js/common/helpers.js') }}"></script>
         <script src="{{ asset('js/main.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery-2.2.0.js') }}"></script>
