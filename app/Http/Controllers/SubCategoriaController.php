@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Categoria;
-use App\Repositories\CategoryRepository;
-use Illuminate\Database\QueryException;
+use App\Repositories\SubCategoryRepository;
+use App\Subcategoria;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use PDOException;
 
-class CategoriaController extends Controller
+class SubCategoriaController extends Controller
 {
     /**
      * @var IBaseRepository
      */
     private $repoitory;
 
-    public function  __construct(CategoryRepository $repo)
+    public function  __construct(SubCategoryRepository $repo)
     {
         $this->middleware('auth');
         $this->repoitory = $repo;
@@ -25,30 +23,32 @@ class CategoriaController extends Controller
 
     public function getAll(Request $request)
     {
-        $categorias = Categoria::orderBy('id','ASC')->paginate(10);
+
+        $Subcategorias = SubCategoria::orderBy('id','ASC')->paginate(10);
         if ($request->ajax() ) {
-            $returnHTML = view('layouts.admin.categoria.index')
-                            ->with('categoryModel',$categorias)
-                            ->render();
+            $returnHTML = view('layouts.admin.subCategoria.index')
+                ->with('subcategoryModel',$Subcategorias)
+                ->render();
             return response()->json(array('success' => true, 'html'=>$returnHTML));
         }
-        //return view('layouts.admin.categoria.index')->with('categoryModel',$categorias);
+        //return view('layouts.admin.subCategoria.index')->with('subcategoryModel',$Subcategorias);
     }
 
     public function get($id)
     {
-        $categorias = $this->repoitory->find($id);
-        return response()->json(array('success' => true, 'data'=>$categorias));
+        $subcategorias = $this->repoitory->find($id);
+        return response()->json(array('success' => true, 'data'=>$subcategorias));
     }
 
-    public function addOrUpdate(Request $request)
+    public  function addOrUpdate(Request $request)
     {
         if($request->ajax()){
             $id = $request->data['id'];
             $isNew = $this->repoitory->find($id);
             if($isNew == null){
-                $cat = new Categoria();
+                $cat = new Subcategoria();
                 $cat->descripcion = $request->data['descripcion'];
+                $cat->categoria_id = $request->data['categoria_id'];
                 $cat->save();
                 return response()->json(["mensaje" => "Creado"]);
             }
@@ -57,17 +57,15 @@ class CategoriaController extends Controller
         }
     }
 
-    public function delete($id)
+    public  function delete($id)
     {
         $this->repoitory->find($id)->delete();
         return response()->json(["mensaje"=>"Borrado"]);
     }
 
-    public function categoriasCombo()
+    public function subcategoriasCombo()
     {
-        $categoriasCombo = $this->repoitory->all(['id','descripcion']);
-        return response()->json(array('success' => true, 'data'=>$categoriasCombo));
+        $subcategoriasCombo = $this->repoitory->all(['id','descripcion']);
+        return response()->json(array('success' => true, 'data'=>$subcategoriasCombo));
     }
 }
-
-

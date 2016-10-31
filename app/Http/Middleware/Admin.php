@@ -11,21 +11,14 @@ class Admin
 
     public function __construct(Guard $auth)
     {
-        this->auth = $auth;
+        $this->auth = $auth;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
         //Validar si es admin
 
-        if(this->auth->user())
+        if($this->auth->user()->admin())
         {
             return $next($request);
         }

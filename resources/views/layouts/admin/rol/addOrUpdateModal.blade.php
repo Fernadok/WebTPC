@@ -9,13 +9,13 @@
 <script type="text/javascript">
 
    var save = function(){
-       var categorias = {
+       var rol = {
            id: $("#id").val(),
-           descripcion:''
+           descripcion:$("#cat").val()
        };
-       categorias.id = categorias.id || 0;
-       categorias.descripcion = $("#cat").val();
-       var route = "{{ route('CategoriaAddOrUpdate') }}";
+       rol.id = rol.id || 0;
+
+       var route = "{{ route('RolAddOrUpdate') }}";
        var token = "{{ csrf_token() }}";
 
        $.ajax({
@@ -23,22 +23,22 @@
            headers: {'X-CSRF-TOKEN': token},
            type: 'POST',
            dataType: 'json',
-           data: {data: categorias},
+           data: {data: rol},
            success: function(){
                $("#myModal").modal('toggle');
-               ajaxLoad('{{ route('CategoriaIndex') }}');
+               ajaxLoad('{{ route('RolIndex') }}');
            }
        });
    };
 
    var nuevoReg = function () {
-       $('#myModalLabel').html("Nueva Categoria");
+       $('#myModalLabel').html("Nuevo Rol");
        $('.form-group input[type=text]').val('');
    };
 
    var editar = function(id){
         $('#myModalLabel').html('Editar #' + id);
-        var route = "{{ route('CategoriaEdit',['id'=> 'IDENTITY']) }}";
+        var route = "{{ route('RolEdit',['id'=> 'IDENTITY']) }}";
         route =route.replace('IDENTITY',id);
         $.get(route, function(res){
             $("#cat").val(res.data.descripcion);

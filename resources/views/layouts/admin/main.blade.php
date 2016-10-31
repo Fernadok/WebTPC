@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentellela Alela! | </title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <title>WebTPC 2.0 Admin</title>
+
+    <!-- Styles -->
     <!-- Bootstrap -->
     <link href="{{ asset('css/plugins/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{ asset('css/plugins/font-awesome.min.css') }}" rel="stylesheet">
     <!-- NProgress -->
-    <link href="{{ asset('css/plugins/nprogress.css"') }} rel="stylesheet">
-    <link href="{{ asset('css/plugins/datatabla.css"') }} rel="stylesheet">
+    <link href="{{ asset('css/plugins/nprogress.css"') }}" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="{{ asset('css/plugins/custom.min.css') }}" rel="stylesheet">
     <style>
         .loading {
             background: lightgoldenrodyellow url('{{asset('images/processing.gif')}}') no-repeat center 65%;
@@ -33,106 +33,70 @@
             display: none;
         }
     </style>
+    <!-- Scripts
+    <script>
+        window.Laravel = <?php echo json_encode([
+                'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>-->
 </head>
-
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        @if (!Auth::guest())
-            @include('layouts.admin.menu')
-        @endif
-        <!-- top navigation -->
-        <div class="top_nav">
-            <div class="nav_menu">
-                <!-- Authentication Links -->
-                @if (!Auth::guest())
-                    <nav>
-                        <div class="nav toggle">
-                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                        </div>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('images/img.jpg') }}" alt="">Administrador
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><a href="{{ route('logoutAdmin') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                                </ul>
-                            </li>
-
-                        </ul>
-                    </nav>
-                @endif
-            </div>
-        </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
-        <div class="panel panel-default">
-            <div class="right_col" role="main">
-                <div id="contenedorAdmin" class="panel-body">
-                    <div class="loading"></div>
-                    <div id="content"></div>
-                </div>
-            </div>
-        </div>
-        <!-- /page content -->
-
-        <!-- footer content -->
-        <footer>
-            <div class="clearfix"></div>
-        </footer>
-        <!-- /footer content -->
-    </div>
+<body>
+<div id="app">
+    @include('layouts.admin.menu')
+    <div class="loading"></div>
+    <div id="content"></div>
+    @yield('content')
 </div>
 
-    <!-- jQuery -->
-    <script src="{{ asset('js/jquery/jquery-2.2.0.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
-    <!-- FastClick -->
-    <script src="{{ asset('js/plugins/fastclick.js') }}"></script>
-    <!-- NProgress -->
-    <script src="{{ asset('js/plugins/nprogress.js') }}">'</script>
-    <!-- Custom Theme Scripts -->
-    <script src="{{ asset('js/plugins/custom.min.js') }}"></script>
-    <script src="{{ asset('js/common/helpers.js') }}"></script>
-    <script src="{{ asset('js/plugins/datatable.js') }}"></script>
+<!-- Scripts -->
 
-    <script type="text/javascript">
-        function ajaxLoad(filename, content) {
-            content = typeof content !== 'undefined' ? content : 'content';
-            $('.loading').show();
-            $.ajax({
-                type: "GET",
-                url: filename,
-                contentType: false,
-                success: function (data) {
-                    console.log('----');
-                    console.log(data);
-                    $("#" + content).html(data.html);
-                    $('.loading').hide();
-                },
-                error: function (xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-        }
+<!-- jQuery -->
+<script src="{{ asset('js/jquery/jquery-2.2.0.js') }}"></script>
+<!-- Bootstrap -->
+<script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ asset('js/plugins/fastclick.js') }}"></script>
+<!-- NProgress -->
+<script src="{{ asset('js/plugins/nprogress.js') }}"></script>
+<!-- Custom Theme Scripts -->
+<script src="{{ asset('js/plugins/custom.min.js') }}"></script>
+<script src="{{ asset('js/common/helpers.js') }}"></script>
 
-        $(document).on('click',".pagination li a",function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');
-            $.ajax({
-                type:'GET',
-                url:url,
-                success:function(data){
-                    $("#content").empty().html(data.html);
-                }
-            });
+<script type="text/javascript">
+    function ajaxLoad(filename, content) {
+        content = typeof content !== 'undefined' ? content : 'content';
+        $('.loading').show();
+        $.ajax({
+            type: "GET",
+            url: filename,
+            contentType: false,
+            success: function (data) {
+                console.log('----');
+                console.log(data);
+                $("#" + content).html(data.html);
+                $('.loading').hide();
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            }
         });
+    }
 
-        @yield('scripts')
-    </script>
+    $(document).on('click',".pagination li a",function(e){
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $.ajax({
+            type:'GET',
+            url:url,
+            success:function(data){
+                $("#content").empty().html(data.html);
+            }
+        });
+    });
+
+    @yield('scripts')
+</script>
+
+@yield('modal-dialog')
 </body>
 </html>
